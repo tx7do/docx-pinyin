@@ -1,7 +1,13 @@
 '判断传入的Unicode是否为中文字符
 Function isChinese(uniChar As Integer) As Boolean
-    isChinese = uniChar >= 19968 And uniChar <= 40869
+    isChinese = uniChar >= 19968 Or uniChar < 0
 End Function
+
+'测试GetPhonetic方法
+Sub testIsChinese()
+    ret = isChinese(AscW("汗"))
+    MsgBox ret
+End Sub
 
 '从Json字符串中提取data字段的数据
 Function getDataFromJSON(s As String) As String
@@ -33,7 +39,11 @@ Sub testGetPhonetic()
     MsgBox ret
 End Sub
 
-'Word批量拼音注音
+' Word批量拼音注音
+' Alignment 对齐方式, see: https://learn.microsoft.com/en-us/office/vba/api/word.wdphoneticguidealignmenttype
+' Raise 偏移量（磅）
+' FontSize 字号（磅）
+' FontName 字体
 Sub BatchAddPinYin()
     Application.ScreenUpdating = False
     Dim SelectText As String
@@ -45,16 +55,14 @@ Sub BatchAddPinYin()
         Selection.MoveRight Unit:=wdCharacter, Count:=1
         Selection.MoveLeft Unit:=wdCharacter, Count:=1, Extend:=wdExtend
         With Selection
-            SelectText = .Text'基准文字
-            If isChinese(AscW(SelectText)) Then'判断是否为中文字符
-                PinYinText = GetPhonetic(SelectText)'基准文字 转换为 拼音文字
+            SelectText = .Text '基准文字
+            If isChinese(AscW(SelectText)) Then '判断是否为中文字符
+                PinYinText = GetPhonetic(SelectText) '基准文字 转换为 拼音文字
                 If PinYinText <> "" Then
-                        .Range.PhoneticGuide _
-                        Text:=PinYinText, _'拼音文本
-                        Alignment:=wdPhoneticGuideAlignmentCenter, _'对齐方式, see: https://learn.microsoft.com/en-us/office/vba/api/word.wdphoneticguidealignmenttype
-                        Raise:=0, _'偏移量（磅）
-                        FontSize:=10, _'字号（磅）
-                        FontName:="等线"'字体
+                    .Range.PhoneticGuide Text:=PinYinText, Alignment:=wdPhoneticGuideAlignmentCenter, _
+                    Raise:=0, _
+                    FontSize:=10, _
+                    FontName:="等线"
                 End If
             End If
         End With
