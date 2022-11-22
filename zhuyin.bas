@@ -49,12 +49,12 @@ Sub BatchAddPinYin()
             If isChinese(AscW(SelectText)) Then'判断是否为中文字符
                 PinYinText = GetPhonetic(SelectText)'基准文字 转换为 拼音文字
                 If PinYinText <> "" Then
-                    .Range.PhoneticGuide _
+                        .Range.PhoneticGuide _
                         Text:=PinYinText, _'拼音文本
-                        Alignment:=wdPhoneticGuideAlignmentCenter, _'对齐方式
+                        Alignment:=wdPhoneticGuideAlignmentCenter, _'对齐方式, see: https://learn.microsoft.com/en-us/office/vba/api/word.wdphoneticguidealignmenttype
                         Raise:=0, _'偏移量（磅）
                         FontSize:=10, _'字号（磅）
-                        FontName:="等线"'字体（磅）
+                        FontName:="等线"'字体
                 End If
             End If
         End With
