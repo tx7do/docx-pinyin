@@ -220,10 +220,10 @@ Sub BatchAddPinYin()
                 If PinYinText <> "" Then
                     .Range.PhoneticGuide _
                         Text:=PinYinText, _'拼音文本
-                        Alignment:=wdPhoneticGuideAlignmentCenter, _'对齐方式
+                        Alignment:=wdPhoneticGuideAlignmentCenter, _'对齐方式, see: https://learn.microsoft.com/en-us/office/vba/api/word.wdphoneticguidealignmenttype
                         Raise:=0, _'偏移量（磅）
                         FontSize:=10, _'字号（磅）
-                        FontName:="等线"'字体（磅）
+                        FontName:="等线"'字体
                 End If
             End If
         End With
